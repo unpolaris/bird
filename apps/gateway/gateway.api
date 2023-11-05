@@ -1,0 +1,104 @@
+syntax = "v1"
+
+info(
+	title: "bird protection"
+	desc: "鸟类保护"
+)
+
+type (
+	BirdAddReq {
+		BirdName    string `json:"birdName"`
+		BirdType    int64  `json:"birdType"`
+		Description string `json:"description"`
+		PicUrl      string `json:"picUrl"`
+	}
+	BirdAddResp {
+		BirdName string `json:"birdName"`
+	}
+)
+
+type (
+	BirUpdateReq {
+		BirdId      int64  `json:"birdId"`
+		BirdName    string `json:"birdName"`
+		BirdType    int64  `json:"birdType"`
+		Description string `json:"description"`
+		PicUrl      string `json:"picUrl"`
+	}
+	BirUpdateResp {
+		BirdId int64 `json:"birdId"`
+	}
+)
+
+type (
+	BirListReq {
+		Page     int64 `json:"page"`
+		PageSize int64 `json:"pageSize"`
+		BirdType int64 `json:"birdType"`
+	}
+	BirListResp {
+		List []BirListData `json:"list"`
+	}
+	BirListData {
+		BirdId      int64  `json:"birdId"`
+		BirdName    string `json:"birdName"`
+		BirdType    int64  `json:"birdType"`
+		Description string `json:"description"`
+		PicUrl      string `json:"picUrl"`
+	}
+)
+
+type (
+	BirGetReq {
+		BirdId int64 `json:"birdId"`
+	}
+	BirGetResp {
+		BirdId      int64  `json:"birdId"`
+		BirdName    string `json:"birdName"`
+		BirdType    int64  `json:"birdType"`
+		Description string `json:"description"`
+		PicUrl      string `json:"picUrl"`
+	}
+)
+
+type (
+	BirDeleteReq {
+		BirdId int64 `json:"birdId"`
+	}
+	BirDeleteResp {
+		BirdId int64 `json:"birdId"`
+	}
+)
+
+@server(
+	group: bird
+)
+service gateway {
+	@doc(
+		summary: "鸟类新增"
+	)
+	@handler BirdAdd
+	post /api/bird/add (BirdAddReq) returns (BirdAddResp)
+	@doc(
+		summary: "鸟类修改"
+	)
+	@handler BirUpdate
+	post /api/bird/update (BirUpdateReq) returns (BirUpdateResp)
+	@doc(
+		summary: "鸟类列表"
+	)
+	@handler BirList
+	post /api/bird/list (BirListReq) returns (BirListResp)
+	@doc(
+		summary: "鸟类查询"
+	)
+	@handler BirGet
+	post /api/bird/get (BirGetReq) returns (BirGetResp)
+	@doc(
+		summary: "鸟类删除"
+	)
+	@handler BirDelete
+	post /api/bird/delete (BirDeleteReq) returns (BirDeleteReq)
+}
+
+// goctl api go -api gateway.api -dir .
