@@ -1,6 +1,7 @@
 package bird
 
 import (
+	birdClient "birdProtection/apps/bird/client/bird"
 	"context"
 
 	"birdProtection/apps/gateway/internal/svc"
@@ -24,7 +25,18 @@ func NewBirGetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirGetLogi
 }
 
 func (l *BirGetLogic) BirGet(req *types.BirGetReq) (resp *types.BirGetResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	res, err := l.svcCtx.BirdClient.BirdInfo(l.ctx, &birdClient.BirdInfoReq{
+		BirdID: req.BirdId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	resp = &types.BirGetResp{
+		BirdId:      res.BirdID,
+		BirdName:    res.BirdName,
+		BirdType:    res.BirdType,
+		Description: res.Description,
+		PicUrl:      res.PicUrl,
+	}
+	return resp, nil
 }

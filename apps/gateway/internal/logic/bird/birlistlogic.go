@@ -1,6 +1,7 @@
 package bird
 
 import (
+	birdClient "birdProtection/apps/bird/client/bird"
 	"context"
 
 	"birdProtection/apps/gateway/internal/svc"
@@ -24,7 +25,14 @@ func NewBirListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirListLo
 }
 
 func (l *BirListLogic) BirList(req *types.BirListReq) (resp *types.BirListResp, err error) {
-	// todo: add your logic here and delete this line
+	res, err := l.svcCtx.BirdClient.BirdList(l.ctx, &birdClient.BirdListReq{
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	})
+	if err != nil {
+		return nil, err
+	}
+	resp = &types.BirListResp{}
 
 	return
 }
