@@ -1,6 +1,7 @@
 package birdlogic
 
 import (
+	"birdProtection/model"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -24,7 +25,23 @@ func NewBirdListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdList
 }
 
 func (l *BirdListLogic) BirdList(in *birdservice.BirdListReq) (*birdservice.BirdListResp, error) {
-	// todo: add your logic here and delete this line
+	var (
+		birdDB = model.NewBirdModel(l.svcCtx.BirdDB, l.ctx)
+		resp   = &birdservice.BirdListResp{}
+	)
+	list, err := birdDB.List(int(in.Page), int(in.PageSize))
+	if err != nil {
+		return nil, err
+	}
+	for _, b := range list {
+		resp.List = append(resp.List, &birdservice.BirdListData{
+			BirdID:      b.Id,
+			BirdName:    b.BirdName,
+			BirdType:    b.BirdType,
+			Description: b.Description,
+			PicUrl:      b.PicUrl,
+		})
+	}
 
-	return &birdservice.BirdListResp{}, nil
+	return resp, nil
 }

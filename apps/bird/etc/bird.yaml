@@ -5,3 +5,9 @@ Etcd:
   Hosts:
   - 192.168.110.23:2379
   Key: bird.rpc
+BirdDB:
+  User: "root"
+  Password: "READYWRMYDBDJKHF001"
+  Host: "192.168.110.61"
+  Port: 3306
+  Database: "user"

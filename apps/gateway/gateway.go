@@ -1,6 +1,7 @@
 package main
 
 import (
+	"birdProtection/pkg/xhttp"
 	"flag"
 	"fmt"
 
@@ -20,10 +21,14 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(c.RestConf, rest.WithNotAllowedHandler(xhttp.NewNotAllowedMiddleware().Handler()))
+	ctx := svc.NewServiceContext(c)
+	server.Use(xhttp.NewLogMiddleware().Handle)
+	server.Use(xhttp.NewCorsMiddleware().Handle)
+	server.Use(xhttp.NewRecoverMiddleware().Handle)
+
 	defer server.Stop()
 
-	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)

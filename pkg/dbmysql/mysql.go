@@ -1,4 +1,4 @@
-package mysql
+package dbmysql
 
 import (
 	"fmt"
@@ -8,25 +8,25 @@ import (
 )
 
 type Config struct {
-	Host     string
-	Port     int
-	User     string
-	PassWord string
-	DB       string
+	User     string // 用户
+	Password string // 密码
+	Host     string // 地址
+	Port     int    // 端口
+	Database string // 数据库
 }
 
-func NewMysql(c *Config) (*gorm.DB, error) {
+func NewDB(c *Config) (*gorm.DB, error) {
 	// dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		c.User, c.PassWord, c.Host, c.Port, c.DB)
+		c.User, c.Password, c.Host, c.Port, c.Database)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	return db, err
 }
 
-func MustNewMysql(c *Config) *gorm.DB {
-	db, err := NewMysql(c)
+func MustNewDB(c *Config) *gorm.DB {
+	db, err := NewDB(c)
 	if err != nil {
-		panic(fmt.Errorf("mysql connect err:%v", err))
+		panic(fmt.Errorf("dbmysql connect err:%v", err))
 	}
 	return db
 }

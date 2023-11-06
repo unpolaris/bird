@@ -1,6 +1,7 @@
 package birdlogic
 
 import (
+	"birdProtection/model"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -24,7 +25,14 @@ func NewBirdAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdAddLo
 }
 
 func (l *BirdAddLogic) BirdAdd(in *birdservice.BirdAddReq) (*birdservice.BirdAddResp, error) {
-	// todo: add your logic here and delete this line
+	var (
+		birdDB = model.NewBirdModel(l.svcCtx.BirdDB, l.ctx)
+		resp   = &birdservice.BirdAddResp{}
+	)
 
-	return &birdservice.BirdAddResp{}, nil
+	err := birdDB.Create(in.BirdName, in.BirdType, in.Description, in.PicUrl)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }

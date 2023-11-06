@@ -11,8 +11,22 @@ type BirdModel interface {
 		birdName string,
 		birdType int64,
 		description string,
-		picUrl string ) error
-
+		picUrl string) error
+	Update(
+		birdId int64,
+		birdName string,
+		birdType int64,
+		description string,
+		picUrl string) error
+	List(
+		page int,
+		pageSize int) ([]*Bird, error)
+	Get(
+		birdId int64,
+	) (*Bird, error)
+	Delete(
+		birdId int64,
+	) error
 }
 
 type Bird struct {
@@ -28,11 +42,11 @@ func (t *Bird) TableName() string {
 }
 
 type defaultBirdModel struct {
-	db  gorm.DB
+	db  *gorm.DB
 	ctx context.Context
 }
 
-func NewBirdModel(db gorm.DB, ctx context.Context) BirdModel {
+func NewBirdModel(db *gorm.DB, ctx context.Context) BirdModel {
 	return &defaultBirdModel{
 		db:  db,
 		ctx: ctx,
@@ -43,12 +57,12 @@ func (m *defaultBirdModel) Create(
 	birdName string,
 	birdType int64,
 	description string,
-	picUrl string ) error {
+	picUrl string) error {
 	b := &Bird{
-		BirdName: birdName,
-		BirdType: birdType,
+		BirdName:    birdName,
+		BirdType:    birdType,
 		Description: description,
-		PicUrl: picUrl,
+		PicUrl:      picUrl,
 	}
 	return m.db.Create(b).Error
 }
@@ -58,12 +72,12 @@ func (m *defaultBirdModel) Update(
 	birdName string,
 	birdType int64,
 	description string,
-	picUrl string ) error {
+	picUrl string) error {
 	updates := map[string]any{
-		"birdName": birdName,
-		"birdType": birdType,
+		"birdName":    birdName,
+		"birdType":    birdType,
 		"description": description,
-		"picUrl": picUrl,
+		"picUrl":      picUrl,
 	}
 	return m.db.Where("id = ?", birdId).Updates(updates).Error
 }
@@ -72,13 +86,13 @@ func (m *defaultBirdModel) List(
 	page int,
 	pageSize int) ([]*Bird, error) {
 	var birds []*Bird
-	err := m.db.Limit(pageSize).Offset((page-1)*pageSize).Find(&birds).Error
+	err := m.db.Limit(pageSize).Offset((page - 1) * pageSize).Find(&birds).Error
 	return birds, err
 }
 
 func (m *defaultBirdModel) Get(
 	birdId int64,
-	) (*Bird, error) {
+) (*Bird, error) {
 	var b Bird
 	err := m.db.Where("id = ?", birdId).Find(&b).Error
 	return &b, err
@@ -86,7 +100,7 @@ func (m *defaultBirdModel) Get(
 
 func (m *defaultBirdModel) Delete(
 	birdId int64,
-	) error {
+) error {
 	err := m.db.Where("id = ?", birdId).Delete(&Bird{}).Error
 	return err
 }

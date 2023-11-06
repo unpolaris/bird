@@ -1,6 +1,8 @@
 package main
 
 import (
+	"birdProtection/pkg/errcode"
+	"birdProtection/pkg/xgrpc"
 	"flag"
 	"fmt"
 
@@ -33,6 +35,8 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	s.AddUnaryInterceptors(xgrpc.CrashInterceptor, errcode.ErrInterceptor)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

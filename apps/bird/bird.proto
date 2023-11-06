@@ -4,10 +4,10 @@ package birdservice;
 option go_package = "./birdservice";
 
 message BirdAddReq {
-    string BirdName =1;
-    int64 BirdType = 2;
-    string Description = 3;
-    string PicUrl =4;
+  string BirdName = 1;
+  int64 BirdType = 2;
+  string Description = 3;
+  string PicUrl = 4;
 }
 
 message BirdAddResp {
@@ -16,37 +16,41 @@ message BirdAddResp {
 
 message BirdUpdateReq {
   int64 BirdID = 1;
-  string BirdName =2;
+  string BirdName = 2;
   int64 BirdType = 3;
   string Description = 4;
-  string PicUrl =5;
+  string PicUrl = 5;
 }
 message BirdUpdateResp {
   int64 BirdID = 1;
 }
 
 message BirdListReq {
-  int64 Page =1;
+  int64 Page = 1;
   int64 PageSize = 2;
   int64 BirdType = 3;
 }
 message BirdListResp {
+  repeated  BirdListData list = 1;
+}
+message BirdListData {
   int64 BirdID = 1;
-  string BirdName =2;
+  string BirdName = 2;
   int64 BirdType = 3;
   string Description = 4;
-  string PicUrl =5;
+  string PicUrl = 5;
 }
+
 
 message BirdInfoReq {
   int64 BirdID = 1;
 }
 message BirdInfoResp {
   int64 BirdID = 1;
-  string BirdName =2;
+  string BirdName = 2;
   int64 BirdType = 3;
   string Description = 4;
-  string PicUrl =5;
+  string PicUrl = 5;
 }
 
 message BirdDeleteReq {

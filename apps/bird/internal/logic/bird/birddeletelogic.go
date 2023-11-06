@@ -1,6 +1,7 @@
 package birdlogic
 
 import (
+	"birdProtection/model"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -24,7 +25,14 @@ func NewBirdDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdDe
 }
 
 func (l *BirdDeleteLogic) BirdDelete(in *birdservice.BirdDeleteReq) (*birdservice.BirdDeleteResp, error) {
-	// todo: add your logic here and delete this line
-
-	return &birdservice.BirdDeleteResp{}, nil
+	var (
+		birdDB = model.NewBirdModel(l.svcCtx.BirdDB, l.ctx)
+		resp   = &birdservice.BirdDeleteResp{}
+	)
+	err := birdDB.Delete(in.BirdID)
+	if err != nil {
+		return nil, err
+	}
+	resp.BirdID = in.BirdID
+	return resp, nil
 }
