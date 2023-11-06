@@ -1,8 +1,9 @@
 package bird
 
 import (
-	birdClient "birdProtection/apps/bird/client/bird"
 	"context"
+
+	birdClient "birdProtection/apps/bird/client/bird"
 
 	"birdProtection/apps/gateway/internal/svc"
 	"birdProtection/apps/gateway/internal/types"
@@ -33,6 +34,14 @@ func (l *BirListLogic) BirList(req *types.BirListReq) (resp *types.BirListResp, 
 		return nil, err
 	}
 	resp = &types.BirListResp{}
-
-	return
+	for _, b := range res.List {
+		resp.List = append(resp.List, types.BirListData{
+			BirdId:      b.BirdID,
+			BirdName:    b.BirdName,
+			BirdType:    b.BirdType,
+			Description: b.Description,
+			PicUrl:      b.PicUrl,
+		})
+	}
+	return resp, nil
 }

@@ -1,8 +1,8 @@
 package xhttp
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/bytedance/sonic"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
@@ -81,7 +81,7 @@ func setHeader(w http.ResponseWriter) {
 // RecoverMiddleware 恐慌捕获恢复处理中间件
 type RecoverMiddleware struct{}
 
-var errMsg, _ = sonic.Marshal(&Response{
+var errMsg, _ = json.Marshal(&Response{
 	Code: 50000,
 	Msg:  "服务出现了一些问题panic， 请稍候重试",
 	Data: struct{}{},
