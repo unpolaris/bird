@@ -22,6 +22,8 @@ type (
 	BirdListData   = birdservice.BirdListData
 	BirdListReq    = birdservice.BirdListReq
 	BirdListResp   = birdservice.BirdListResp
+	BirdSearchReq  = birdservice.BirdSearchReq
+	BirdSearchResp = birdservice.BirdSearchResp
 	BirdUpdateReq  = birdservice.BirdUpdateReq
 	BirdUpdateResp = birdservice.BirdUpdateResp
 
@@ -30,6 +32,7 @@ type (
 		BirdUpdate(ctx context.Context, in *BirdUpdateReq, opts ...grpc.CallOption) (*BirdUpdateResp, error)
 		BirdList(ctx context.Context, in *BirdListReq, opts ...grpc.CallOption) (*BirdListResp, error)
 		BirdInfo(ctx context.Context, in *BirdInfoReq, opts ...grpc.CallOption) (*BirdInfoResp, error)
+		BirdSearch(ctx context.Context, in *BirdSearchReq, opts ...grpc.CallOption) (*BirdSearchResp, error)
 		BirdDelete(ctx context.Context, in *BirdDeleteReq, opts ...grpc.CallOption) (*BirdDeleteResp, error)
 	}
 
@@ -62,6 +65,11 @@ func (m *defaultBird) BirdList(ctx context.Context, in *BirdListReq, opts ...grp
 func (m *defaultBird) BirdInfo(ctx context.Context, in *BirdInfoReq, opts ...grpc.CallOption) (*BirdInfoResp, error) {
 	client := birdservice.NewBirdClient(m.cli.Conn())
 	return client.BirdInfo(ctx, in, opts...)
+}
+
+func (m *defaultBird) BirdSearch(ctx context.Context, in *BirdSearchReq, opts ...grpc.CallOption) (*BirdSearchResp, error) {
+	client := birdservice.NewBirdClient(m.cli.Conn())
+	return client.BirdSearch(ctx, in, opts...)
 }
 
 func (m *defaultBird) BirdDelete(ctx context.Context, in *BirdDeleteReq, opts ...grpc.CallOption) (*BirdDeleteResp, error) {

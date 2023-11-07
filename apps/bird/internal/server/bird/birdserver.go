@@ -42,6 +42,11 @@ func (s *BirdServer) BirdInfo(ctx context.Context, in *birdservice.BirdInfoReq) 
 	return l.BirdInfo(in)
 }
 
+func (s *BirdServer) BirdSearch(ctx context.Context, in *birdservice.BirdSearchReq) (*birdservice.BirdSearchResp, error) {
+	l := birdlogic.NewBirdSearchLogic(ctx, s.svcCtx)
+	return l.BirdSearch(in)
+}
+
 func (s *BirdServer) BirdDelete(ctx context.Context, in *birdservice.BirdDeleteReq) (*birdservice.BirdDeleteResp, error) {
 	l := birdlogic.NewBirdDeleteLogic(ctx, s.svcCtx)
 	return l.BirdDelete(in)

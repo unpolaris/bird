@@ -10,21 +10,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type BirGetLogic struct {
+type BirdGetLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewBirGetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirGetLogic {
-	return &BirGetLogic{
+func NewBirdGetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdGetLogic {
+	return &BirdGetLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *BirGetLogic) BirGet(req *types.BirGetReq) (resp *types.BirGetResp, err error) {
+func (l *BirdGetLogic) BirdGet(req *types.BirGetReq) (resp *types.BirGetResp, err error) {
 	res, err := l.svcCtx.BirdClient.BirdInfo(l.ctx, &birdClient.BirdInfoReq{
 		BirdID: req.BirdId,
 	})
@@ -37,6 +37,8 @@ func (l *BirGetLogic) BirGet(req *types.BirGetReq) (resp *types.BirGetResp, err 
 		BirdType:    res.BirdType,
 		Description: res.Description,
 		PicUrl:      res.PicUrl,
+		CreateTime:  res.CreateTime,
+		UpdateTime:  res.UpdateTime,
 	}
 	return resp, nil
 }

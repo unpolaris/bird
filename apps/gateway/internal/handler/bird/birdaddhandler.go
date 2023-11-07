@@ -1,28 +1,27 @@
 package bird
 
 import (
+	"birdProtection/pkg/xhttp"
 	"net/http"
 
 	"birdProtection/apps/gateway/internal/logic/bird"
 	"birdProtection/apps/gateway/internal/svc"
 	"birdProtection/apps/gateway/internal/types"
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func BirdAddHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.BirdAddReq
-		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+		if err := xhttp.Parse(r, &req); err != nil {
+			xhttp.Error(w, r, err)
 			return
 		}
-
 		l := bird.NewBirdAddLogic(r.Context(), svcCtx)
 		resp, err := l.BirdAdd(&req)
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			xhttp.Error(w, r, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			xhttp.OkJson(w, r, resp)
 		}
 	}
 }

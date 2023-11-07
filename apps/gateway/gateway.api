@@ -49,6 +49,12 @@ type (
 )
 
 type (
+	BirdSearchReq {
+		Keyword string `json:"keyword"`
+	}
+)
+
+type (
 	BirGetReq {
 		BirdId int64 `json:"birdId"`
 	}
@@ -58,6 +64,8 @@ type (
 		BirdType    int64  `json:"birdType"`
 		Description string `json:"description"`
 		PicUrl      string `json:"picUrl"`
+		CreateTime  int64  `json:"createTime"`
+		UpdateTime  int64  `json:"updateTime"`
 	}
 )
 
@@ -82,22 +90,27 @@ service gateway {
 	@doc(
 		summary: "鸟类修改"
 	)
-	@handler BirUpdate
+	@handler BirdUpdate
 	post /api/bird/update (BirUpdateReq) returns (BirUpdateResp)
 	@doc(
 		summary: "鸟类列表"
 	)
-	@handler BirList
+	@handler BirdList
 	post /api/bird/list (BirListReq) returns (BirListResp)
 	@doc(
 		summary: "鸟类查询"
 	)
-	@handler BirGet
+	@handler BirdGet
 	post /api/bird/get (BirGetReq) returns (BirGetResp)
+	@doc(
+		summary: "鸟类搜索"
+	)
+	@handler BirdSearch
+	post /api/bird/search (BirdSearchReq) returns (BirListResp)
 	@doc(
 		summary: "鸟类删除"
 	)
-	@handler BirDelete
+	@handler BirdDelete
 	post /api/bird/delete (BirDeleteReq) returns (BirDeleteReq)
 }
 

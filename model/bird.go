@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -24,17 +25,22 @@ type BirdModel interface {
 	Get(
 		birdId int64,
 	) (*Bird, error)
+	Search(
+		birdName string,
+	) ([]*Bird, error)
 	Delete(
 		birdId int64,
 	) error
 }
 
 type Bird struct {
-	Id          int64  `gorm:"Id" json:"birdId"`
-	BirdName    string `gorm:"birdName" json:"birdName"`
-	BirdType    int64  `gorm:"birdType" json:"birdType"`
-	Description string `gorm:"description" json:"description"`
-	PicUrl      string `gorm:"picUrl" json:"picUrl"`
+	Id          int64     `gorm:"Id" json:"birdId"`
+	BirdName    string    `gorm:"birdName" json:"birdName"`
+	BirdType    int64     `gorm:"birdType" json:"birdType"`
+	Description string    `gorm:"description" json:"description"`
+	PicUrl      string    `gorm:"picUrl" json:"picUrl"`
+	CreateTime  time.Time `gorm:"createTime" json:"createTime"`
+	UpdateTime  time.Time `gorm:"updateTime" json:"updateTime"`
 }
 
 func (t *Bird) TableName() string {
@@ -96,6 +102,13 @@ func (m *defaultBirdModel) Get(
 	var b Bird
 	err := m.db.Where("id = ?", birdId).Find(&b).Error
 	return &b, err
+}
+
+func (m *defaultBirdModel) Search(
+	birdName string) ([]*Bird, error) {
+	var birds []*Bird
+	err := m.db.Where("birdName = %?%", birdName).Limit(10).Find(&birds).Error
+	return birds, err
 }
 
 func (m *defaultBirdModel) Delete(

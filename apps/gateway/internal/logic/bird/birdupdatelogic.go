@@ -1,30 +1,30 @@
 package bird
 
 import (
+	birdClient "birdProtection/apps/bird/client/bird"
 	"context"
 
-	birdClient "birdProtection/apps/bird/client/bird"
 	"birdProtection/apps/gateway/internal/svc"
 	"birdProtection/apps/gateway/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type BirUpdateLogic struct {
+type BirdUpdateLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewBirUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirUpdateLogic {
-	return &BirUpdateLogic{
+func NewBirdUpdateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdUpdateLogic {
+	return &BirdUpdateLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *BirUpdateLogic) BirUpdate(req *types.BirUpdateReq) (resp *types.BirUpdateResp, err error) {
+func (l *BirdUpdateLogic) BirdUpdate(req *types.BirUpdateReq) (resp *types.BirUpdateResp, err error) {
 	_, err = l.svcCtx.BirdClient.BirdUpdate(l.ctx, &birdClient.BirdUpdateReq{
 		BirdID:      req.BirdId,
 		BirdName:    req.BirdName,

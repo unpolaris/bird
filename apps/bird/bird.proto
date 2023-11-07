@@ -51,8 +51,16 @@ message BirdInfoResp {
   int64 BirdType = 3;
   string Description = 4;
   string PicUrl = 5;
+  int64 CreateTime = 6;
+  int64 UpdateTime = 7;
 }
 
+message BirdSearchReq {
+  string BirdName = 1;
+}
+message BirdSearchResp {
+  repeated  BirdListData list = 1;
+}
 message BirdDeleteReq {
   int64 BirdID = 1;
 }
@@ -64,6 +72,7 @@ service Bird {
   rpc BirdUpdate (BirdUpdateReq) returns (BirdUpdateResp) ;
   rpc BirdList (BirdListReq) returns (BirdListResp) ;
   rpc BirdInfo (BirdInfoReq) returns (BirdInfoResp) ;
+  rpc BirdSearch (BirdSearchReq) returns (BirdSearchResp) ;
   rpc BirdDelete (BirdDeleteReq) returns (BirdDeleteResp) ;
 }
 

@@ -42,6 +42,10 @@ type BirListData struct {
 	PicUrl      string `json:"picUrl"`
 }
 
+type BirdSearchReq struct {
+	Keyword string `json:"keyword"`
+}
+
 type BirGetReq struct {
 	BirdId int64 `json:"birdId"`
 }
@@ -52,6 +56,8 @@ type BirGetResp struct {
 	BirdType    int64  `json:"birdType"`
 	Description string `json:"description"`
 	PicUrl      string `json:"picUrl"`
+	CreateTime  int64  `json:"createTime"`
+	UpdateTime  int64  `json:"updateTime"`
 }
 
 type BirDeleteReq struct {

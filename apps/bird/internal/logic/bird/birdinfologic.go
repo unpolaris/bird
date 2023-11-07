@@ -42,6 +42,8 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 		BirdType:    data.BirdType,
 		Description: data.Description,
 		PicUrl:      data.PicUrl,
+		CreateTime:  data.CreateTime.Unix(),
+		UpdateTime:  data.UpdateTime.Unix(),
 	}
 	return resp, nil
 }

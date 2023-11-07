@@ -23,6 +23,7 @@ const (
 	Bird_BirdUpdate_FullMethodName = "/birdservice.Bird/BirdUpdate"
 	Bird_BirdList_FullMethodName   = "/birdservice.Bird/BirdList"
 	Bird_BirdInfo_FullMethodName   = "/birdservice.Bird/BirdInfo"
+	Bird_BirdSearch_FullMethodName = "/birdservice.Bird/BirdSearch"
 	Bird_BirdDelete_FullMethodName = "/birdservice.Bird/BirdDelete"
 )
 
@@ -34,6 +35,7 @@ type BirdClient interface {
 	BirdUpdate(ctx context.Context, in *BirdUpdateReq, opts ...grpc.CallOption) (*BirdUpdateResp, error)
 	BirdList(ctx context.Context, in *BirdListReq, opts ...grpc.CallOption) (*BirdListResp, error)
 	BirdInfo(ctx context.Context, in *BirdInfoReq, opts ...grpc.CallOption) (*BirdInfoResp, error)
+	BirdSearch(ctx context.Context, in *BirdSearchReq, opts ...grpc.CallOption) (*BirdSearchResp, error)
 	BirdDelete(ctx context.Context, in *BirdDeleteReq, opts ...grpc.CallOption) (*BirdDeleteResp, error)
 }
 
@@ -81,6 +83,15 @@ func (c *birdClient) BirdInfo(ctx context.Context, in *BirdInfoReq, opts ...grpc
 	return out, nil
 }
 
+func (c *birdClient) BirdSearch(ctx context.Context, in *BirdSearchReq, opts ...grpc.CallOption) (*BirdSearchResp, error) {
+	out := new(BirdSearchResp)
+	err := c.cc.Invoke(ctx, Bird_BirdSearch_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *birdClient) BirdDelete(ctx context.Context, in *BirdDeleteReq, opts ...grpc.CallOption) (*BirdDeleteResp, error) {
 	out := new(BirdDeleteResp)
 	err := c.cc.Invoke(ctx, Bird_BirdDelete_FullMethodName, in, out, opts...)
@@ -98,6 +109,7 @@ type BirdServer interface {
 	BirdUpdate(context.Context, *BirdUpdateReq) (*BirdUpdateResp, error)
 	BirdList(context.Context, *BirdListReq) (*BirdListResp, error)
 	BirdInfo(context.Context, *BirdInfoReq) (*BirdInfoResp, error)
+	BirdSearch(context.Context, *BirdSearchReq) (*BirdSearchResp, error)
 	BirdDelete(context.Context, *BirdDeleteReq) (*BirdDeleteResp, error)
 	mustEmbedUnimplementedBirdServer()
 }
@@ -117,6 +129,9 @@ func (UnimplementedBirdServer) BirdList(context.Context, *BirdListReq) (*BirdLis
 }
 func (UnimplementedBirdServer) BirdInfo(context.Context, *BirdInfoReq) (*BirdInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BirdInfo not implemented")
+}
+func (UnimplementedBirdServer) BirdSearch(context.Context, *BirdSearchReq) (*BirdSearchResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BirdSearch not implemented")
 }
 func (UnimplementedBirdServer) BirdDelete(context.Context, *BirdDeleteReq) (*BirdDeleteResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BirdDelete not implemented")
@@ -206,6 +221,24 @@ func _Bird_BirdInfo_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Bird_BirdSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BirdSearchReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BirdServer).BirdSearch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Bird_BirdSearch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BirdServer).BirdSearch(ctx, req.(*BirdSearchReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Bird_BirdDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BirdDeleteReq)
 	if err := dec(in); err != nil {
@@ -246,6 +279,10 @@ var Bird_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BirdInfo",
 			Handler:    _Bird_BirdInfo_Handler,
+		},
+		{
+			MethodName: "BirdSearch",
+			Handler:    _Bird_BirdSearch_Handler,
 		},
 		{
 			MethodName: "BirdDelete",

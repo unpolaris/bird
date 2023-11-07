@@ -21,22 +21,27 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/api/bird/update",
-				Handler: bird.BirUpdateHandler(serverCtx),
+				Handler: bird.BirdUpdateHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/api/bird/list",
-				Handler: bird.BirListHandler(serverCtx),
+				Handler: bird.BirdListHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/api/bird/get",
-				Handler: bird.BirGetHandler(serverCtx),
+				Handler: bird.BirdGetHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/api/bird/search",
+				Handler: bird.BirdSearchHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
 				Path:    "/api/bird/delete",
-				Handler: bird.BirDeleteHandler(serverCtx),
+				Handler: bird.BirdDeleteHandler(serverCtx),
 			},
 		},
 	)
