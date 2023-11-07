@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Config mysql配置
 type Config struct {
 	User     string // 用户
 	Password string // 密码
@@ -15,6 +16,7 @@ type Config struct {
 	Database string // 数据库
 }
 
+// NewDB 创建mysql连接
 func NewDB(c *Config) (*gorm.DB, error) {
 	// dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -23,6 +25,7 @@ func NewDB(c *Config) (*gorm.DB, error) {
 	return db, err
 }
 
+// MustNewDB 创建mysql连接
 func MustNewDB(c *Config) *gorm.DB {
 	db, err := NewDB(c)
 	if err != nil {

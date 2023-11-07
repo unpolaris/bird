@@ -34,7 +34,7 @@ type BirdModel interface {
 }
 
 type Bird struct {
-	Id          int64     `gorm:"Id" json:"birdId"`
+	Id          int64     `gorm:"Id" json:"Id"`
 	BirdName    string    `gorm:"birdName" json:"birdName"`
 	BirdType    int64     `gorm:"birdType" json:"birdType"`
 	Description string    `gorm:"description" json:"description"`
