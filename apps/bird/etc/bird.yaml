@@ -11,3 +11,11 @@ BirdDB:
   Host: "192.168.110.61"
   Port: 3306
   Database: "user"
+
+Cache:
+  Address: "192.168.110.23:6379"
+  Password: "WRRDBJHKLP001"
+  DB: 1
+  MaxIdle: 10
+  MaxActive: 100
+  IdleTimeout: 86400000000000
