@@ -2,9 +2,11 @@ package birdlogic
 
 import (
 	"birdProtection/model"
+	"birdProtection/pkg/errcode"
 	"birdProtection/pkg/gconst"
 	"context"
 	"fmt"
+	"github.com/bytedance/sonic"
 
 	"birdProtection/apps/bird/internal/svc"
 	"birdProtection/apps/bird/pb/birdservice"
@@ -31,12 +33,14 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 		birdDB = model.NewBirdModel(l.svcCtx.BirdDB, l.ctx)
 		resp   = &birdservice.BirdInfoResp{}
 	)
-	cacheKey := fmt.Sprintf("%s:%v", gconst.BirdInfoPrefix, in.BirdID)
-	err := l.svcCtx.CacheDB.Get(l.ctx, cacheKey).Scan(&resp)
+	cacheKey := fmt.Sprintf("%s:%v", gconst.BirdListPrefix, in.BirdID)
+	cacheStr, err := l.svcCtx.CacheDB.Get(l.ctx, cacheKey).Result()
 	if err != nil {
-		return nil, err
-	}
-	if resp != nil {
+		if !errcode.IsRedisRecordNotFound(err) {
+			return nil, err
+		}
+	} else {
+		err = sonic.UnmarshalString(cacheStr, &resp)
 		return resp, nil
 	}
 
@@ -44,7 +48,7 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 	if err != nil {
 		return nil, err
 	}
-	if data != nil {
+	if data == nil {
 		return nil, err
 	}
 	resp = &birdservice.BirdInfoResp{
@@ -56,7 +60,11 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 		CreateTime:  data.CreateTime.Unix(),
 		UpdateTime:  data.UpdateTime.Unix(),
 	}
-	err = l.svcCtx.CacheDB.Set(l.ctx, cacheKey, resp, gconst.BirdInfoExpire).Err()
+	cacheStr, err = sonic.MarshalString(resp)
+	if err != nil {
+		return nil, err
+	}
+	err = l.svcCtx.CacheDB.Set(l.ctx, cacheKey, cacheStr, gconst.BirdInfoExpire).Err()
 	if err != nil {
 		return nil, err
 	}

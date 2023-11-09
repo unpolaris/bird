@@ -2,9 +2,11 @@ package birdlogic
 
 import (
 	"birdProtection/model"
+	"birdProtection/pkg/errcode"
 	"birdProtection/pkg/gconst"
 	"context"
 	"fmt"
+	"github.com/bytedance/sonic"
 
 	"birdProtection/apps/bird/internal/svc"
 	"birdProtection/apps/bird/pb/birdservice"
@@ -33,11 +35,13 @@ func (l *BirdListLogic) BirdList(in *birdservice.BirdListReq) (*birdservice.Bird
 	)
 	cacheKey := fmt.Sprintf("%s:%v", gconst.BirdListPrefix, in.Page)
 	if in.Page == 1 {
-		err := l.svcCtx.CacheDB.Get(l.ctx, cacheKey).Scan(&resp)
+		cacheStr, err := l.svcCtx.CacheDB.Get(l.ctx, cacheKey).Result()
 		if err != nil {
-			return nil, err
-		}
-		if resp != nil {
+			if !errcode.IsRedisRecordNotFound(err) {
+				return nil, err
+			}
+		} else {
+			err = sonic.UnmarshalString(cacheStr, &resp)
 			return resp, nil
 		}
 	}
@@ -56,7 +60,8 @@ func (l *BirdListLogic) BirdList(in *birdservice.BirdListReq) (*birdservice.Bird
 		})
 	}
 	if in.Page == 1 {
-		err = l.svcCtx.CacheDB.Set(l.ctx, cacheKey, resp, gconst.BirdListExpire).Err()
+		cacheStr, _ := sonic.MarshalString(resp)
+		err = l.svcCtx.CacheDB.Set(l.ctx, cacheKey, cacheStr, gconst.BirdListExpire).Err()
 		if err != nil {
 			return nil, err
 		}

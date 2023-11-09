@@ -34,13 +34,13 @@ type BirdModel interface {
 }
 
 type Bird struct {
-	Id          int64     `gorm:"Id" json:"Id"`
-	BirdName    string    `gorm:"birdName" json:"birdName"`
-	BirdType    int64     `gorm:"birdType" json:"birdType"`
-	Description string    `gorm:"description" json:"description"`
-	PicUrl      string    `gorm:"picUrl" json:"picUrl"`
-	CreateTime  time.Time `gorm:"createTime" json:"createTime"`
-	UpdateTime  time.Time `gorm:"updateTime" json:"updateTime"`
+	Id          int64     `gorm:"column:id" json:"id"`
+	BirdName    string    `gorm:"column:birdName" json:"birdName"`
+	BirdType    int64     `gorm:"column:birdType" json:"birdType"`
+	Description string    `gorm:"column:description" json:"description"`
+	PicUrl      string    `gorm:"column:picUrl" json:"picUrl"`
+	CreateTime  time.Time `gorm:"column:createTime" json:"createTime"`
+	UpdateTime  time.Time `gorm:"column:updateTime" json:"updateTime"`
 }
 
 func (t *Bird) TableName() string {
@@ -59,18 +59,22 @@ func NewBirdModel(db *gorm.DB, ctx context.Context) BirdModel {
 	}
 }
 
+func (m *defaultBirdModel) TableName() string {
+	return "bird"
+}
+
 func (m *defaultBirdModel) Create(
 	birdName string,
 	birdType int64,
 	description string,
 	picUrl string) error {
-	b := &Bird{
-		BirdName:    birdName,
-		BirdType:    birdType,
-		Description: description,
-		PicUrl:      picUrl,
+	b := map[string]any{
+		"birdName":    birdName,
+		"birdType":    birdType,
+		"description": description,
+		"picUrl":      picUrl,
 	}
-	return m.db.Create(b).Error
+	return m.db.Table(m.TableName()).Create(b).Error
 }
 
 func (m *defaultBirdModel) Update(
@@ -85,7 +89,7 @@ func (m *defaultBirdModel) Update(
 		"description": description,
 		"picUrl":      picUrl,
 	}
-	return m.db.Where("id = ?", birdId).Updates(updates).Error
+	return m.db.Table(m.TableName()).Where("id = ?", birdId).Updates(updates).Error
 }
 
 func (m *defaultBirdModel) List(
@@ -107,7 +111,7 @@ func (m *defaultBirdModel) Get(
 func (m *defaultBirdModel) Search(
 	birdName string) ([]*Bird, error) {
 	var birds []*Bird
-	err := m.db.Where("birdName = %?%", birdName).Limit(10).Find(&birds).Error
+	err := m.db.Where("birdName Like ? ", "%"+birdName+"%").Limit(10).Find(&birds).Error
 	return birds, err
 }
 

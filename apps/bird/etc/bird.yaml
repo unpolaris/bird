@@ -1,16 +1,16 @@
 Name: bird.rpc
 ListenOn: 0.0.0.0:8080
-
+Timeout: 10000 # 10s
 Etcd:
   Hosts:
   - 192.168.110.23:2379
   Key: bird.rpc
 BirdDB:
   User: "root"
-  Password: "READYWRMYDBDJKHF001"
-  Host: "192.168.110.61"
+  Password: "WRMYDBDJKHF001"
+  Host: "192.168.110.23"
   Port: 3306
-  Database: "user"
+  Database: "bird"
 
 Cache:
   Address: "192.168.110.23:6379"

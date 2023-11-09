@@ -25,6 +25,7 @@ func NewBirdDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdDe
 }
 
 func (l *BirdDeleteLogic) BirdDelete(req *types.BirDeleteReq) (resp *types.BirDeleteReq, err error) {
+	resp = &types.BirDeleteReq{}
 	_, err = l.svcCtx.BirdClient.BirdDelete(l.ctx, &birdClient.BirdDeleteReq{
 		BirdID: req.BirdId,
 	})

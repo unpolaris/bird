@@ -25,6 +25,7 @@ func NewBirdAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BirdAddLo
 }
 
 func (l *BirdAddLogic) BirdAdd(req *types.BirdAddReq) (resp *types.BirdAddResp, err error) {
+	resp = &types.BirdAddResp{}
 	_, err = l.svcCtx.BirdClient.BirdAdd(l.ctx, &birdClient.BirdAddReq{
 		BirdName:    req.BirdName,
 		BirdType:    req.BirdType,
