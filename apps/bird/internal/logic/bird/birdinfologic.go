@@ -37,16 +37,16 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 	cacheStr, err := l.svcCtx.CacheDB.Get(l.ctx, cacheKey).Result()
 	if err != nil {
 		if !errcode.IsRedisRecordNotFound(err) {
-			return nil, err
+			return nil, errcode.ErrBirdRedisGet
 		}
 	} else {
-		err = sonic.UnmarshalString(cacheStr, &resp)
+		_ = sonic.UnmarshalString(cacheStr, &resp)
 		return resp, nil
 	}
 
 	data, err := birdDB.Get(in.BirdID)
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdInfo
 	}
 	if data == nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (l *BirdInfoLogic) BirdInfo(in *birdservice.BirdInfoReq) (*birdservice.Bird
 	}
 	cacheStr, err = sonic.MarshalString(resp)
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdMarshalString
 	}
 	err = l.svcCtx.CacheDB.Set(l.ctx, cacheKey, cacheStr, gconst.BirdInfoExpire).Err()
 	if err != nil {

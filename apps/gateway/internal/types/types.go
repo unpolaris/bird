@@ -27,7 +27,7 @@ type BirUpdateResp struct {
 type BirListReq struct {
 	Page     int64 `json:"page"`
 	PageSize int64 `json:"pageSize"`
-	BirdType int64 `json:"birdType"`
+	BirdType int64 `json:"birdType,optional"`
 }
 
 type BirListResp struct {

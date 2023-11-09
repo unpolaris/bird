@@ -2,6 +2,7 @@ package birdlogic
 
 import (
 	"birdProtection/model"
+	"birdProtection/pkg/errcode"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -31,7 +32,7 @@ func (l *BirdSearchLogic) BirdSearch(in *birdservice.BirdSearchReq) (*birdservic
 	)
 	list, err := birdDB.Search(in.BirdName)
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdSearch
 	}
 	for _, b := range list {
 		resp.List = append(resp.List, &birdservice.BirdListData{

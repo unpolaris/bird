@@ -34,7 +34,7 @@ type (
 	BirListReq {
 		Page     int64 `json:"page"`
 		PageSize int64 `json:"pageSize"`
-		BirdType int64 `json:"birdType"`
+		BirdType int64 `json:"birdType,optional"`
 	}
 	BirListResp {
 		List []BirListData `json:"list"`

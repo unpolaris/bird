@@ -48,7 +48,7 @@ func (l *BirdListLogic) BirdList(in *birdservice.BirdListReq) (*birdservice.Bird
 
 	list, err := birdDB.List(int(in.Page), int(in.PageSize))
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdList
 	}
 	for _, b := range list {
 		resp.List = append(resp.List, &birdservice.BirdListData{

@@ -2,6 +2,7 @@ package birdlogic
 
 import (
 	"birdProtection/model"
+	"birdProtection/pkg/errcode"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -32,7 +33,7 @@ func (l *BirdAddLogic) BirdAdd(in *birdservice.BirdAddReq) (*birdservice.BirdAdd
 
 	err := birdDB.Create(in.BirdName, in.BirdType, in.Description, in.PicUrl)
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdCreate
 	}
 	return resp, nil
 }

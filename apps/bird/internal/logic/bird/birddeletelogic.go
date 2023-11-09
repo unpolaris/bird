@@ -2,6 +2,7 @@ package birdlogic
 
 import (
 	"birdProtection/model"
+	"birdProtection/pkg/errcode"
 	"context"
 
 	"birdProtection/apps/bird/internal/svc"
@@ -31,7 +32,7 @@ func (l *BirdDeleteLogic) BirdDelete(in *birdservice.BirdDeleteReq) (*birdservic
 	)
 	err := birdDB.Delete(in.BirdID)
 	if err != nil {
-		return nil, err
+		return nil, errcode.ErrBirdDel
 	}
 	resp.BirdID = in.BirdID
 	return resp, nil
